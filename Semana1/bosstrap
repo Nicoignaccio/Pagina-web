@@ -1,0 +1,18 @@
+//boostrap 5 // w3schools
+
+<div class="container-fluid mt-3">
+  <div class="row">
+    <div class="bg-danger col-12">barraNavegadora</div>
+  </div>
+
+  <div class="row">
+    <div class="bg-dark col-12 col-md-3">Izquierda</div>
+    <div class="bg-warning col-12 col-md-6">Centro</div>
+    <div class="bg-dark col-12 col-md-3">Derecho</div>
+  </div>
+
+  <div class="row">
+    <div class="bg-light col-12 col-md-4 ">Izq</div>
+    <div class="bg-primary col-12 col-md-4">Centro</div>
+    <div class="bg-light col-12 col-md-4">Der</div>
+  </div> 
