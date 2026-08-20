@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <title>Pagina Principal</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    </head>
+    <body>
+        <!-- NAVBAR -->
+        <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">MiEmpresa</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                    <ul class="navbar-nav">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Empresa</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="empresa.php">Quienes Somos</a></li>
+                                <li><a class="dropdown-item" href="equipo.php">Nuestro Equipo</a></li>
+                                <li><a class="dropdown-item" href="historia.php">Nuestra Historia</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="productos.php">Productos</a>
+                        </li>  
+                        <li class="nav-item">
+                            <a class="nav-link" href="servicios.php">Servicios</a>
+                        </li>  
+                        <li class="nav-item">
+                            <a class="nav-link" href="contacto.php">Contacto</a>
+                        </li> 
+                        <li class="nav-item">
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal">Iniciar Sesion</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- CONTAINER -->
+        <div class="container bg-light p-5 my-5 border">
+            pagina principal<br>
+            <a href="index.php"> Ir a Principal</a><br>
+            <a href="empresa.php"> Ir a Empresa</a><br>
+            <a href="productos.php"> Ir a Productos</a><br>
+            <a href="servicios.php"> Ir a Servicios</a><br>
+            <a href="contacto.php"> Ir a Contacto</a>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="container-fluid bg-dark">
+            <div class="row p-3">
+                <div class="col-4"></div>
+                <div class="col-4 d-flex justify-content-center" style="color: rgb(255, 255, 255)">
+                    <strong>soporte@miempresa.com</strong>
+                </div>
+                <div class="col-4"></div>
+            </div>
+        </div>
+
+        <!-- MODAL -->
+        <div class="modal fade" id="myModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Iniciar Sesión</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <form action="/action_page.php" method="post">
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email:</label>
+                                <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password:</label>
+                                <input type="password" class="form-control" id="password" placeholder="Enter password" name="password">
+                            </div>
+                            
+                            <!-- ENLACE DE RECUPERACIÓN DE CONTRASEÑA -->
+                            <div class="mb-3 text-end">
+                                <a href="recuperar_password.php" class="text-decoration-none">¿Olvidaste tu contraseña?</a>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100">Submit</button>
+                        </form> 
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>           
+    </body>
+</html>
