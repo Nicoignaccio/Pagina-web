@@ -3,3 +3,4 @@ Semana 2: 16 de agosto
 semana 3: 23 de agosot
 semana 4: 28 de agosto - comentarios adjuntos al boceto
 semaana 5: 07 de septiembre 
+semaan 6: 12 de septeimbre
