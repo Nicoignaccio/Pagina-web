@@ -5,7 +5,6 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from bson import ObjectId
 from contextlib import asynccontextmanager
 
-# Configuración de Base de Datos MongoDB
 MONGODB_URI = "mongodb://localhost:27017"
 DB_NAME = "fukusuke_delivery"
 COLL_NAME = "productos"
@@ -14,7 +13,7 @@ client: AsyncIOMotorClient = None
 db = None
 coll = None
 
-# Manejador del ciclo de vida del servidor (Conexión / Desconexión)
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     global client, db, coll
@@ -24,14 +23,14 @@ async def lifespan(app: FastAPI):
     yield
     client.close()
 
-# Inicialización de la aplicación FastAPI
+
 app = FastAPI(
     title="Fukusuke Sushi API",
     version="1.0.0",
     lifespan=lifespan
 )
 
-# (Validación y Esquema)
+
 
 class ProductoBase(BaseModel):
     nombre: str = Field(min_length=1, description="Nombre del roll o producto")
@@ -57,12 +56,12 @@ def doc_to_producto_out(doc: dict) -> ProductoOut:
 
 
 
-# 1. Healthcheck
+
 @app.get("/health", tags=["Sistema"])
 def health():
     return {"status": "ok"}
 
-# 2. Listar con filtros y paginación (GET)
+
 @app.get("/productos", response_model=List[ProductoOut], tags=["Productos"])
 async def listar_productos(
     q: Optional[str] = Query(None, description="Filtrar por nombre que contenga q"),
@@ -79,7 +78,7 @@ async def listar_productos(
         productos.append(doc_to_producto_out(doc))
     return productos
 
-# 3. Crear nuevo producto 
+
 @app.post("/productos", response_model=ProductoOut, status_code=201, tags=["Productos"])
 async def crear_producto(item: ProductoIn):
     nuevo_doc = item.model_dump()
