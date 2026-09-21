@@ -1,0 +1,226 @@
+:root {
+  --rojo: #8A0303;
+  --rojo-oscuro: #800000;
+  --negro: #000000;
+  --arena: #D1CEC6;
+  --blanco: #FFFFFF;
+  --texto-secundario: #444444;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: var(--arena);
+  color: var(--negro);
+}
+
+/* NAVBAR */
+.navbar {
+  background: var(--negro);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 24px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--blanco);
+  font-family: 'Brush Script MT', cursive, sans-serif;
+  font-size: 1.6rem;
+}
+
+.logo-circle {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 2px solid #B08D57;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+  color: #B08D57;
+  text-align: center;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.nav-links a {
+  color: var(--blanco);
+  text-decoration: none;
+  font-size: 1.05rem;
+}
+
+.nav-btn {
+  padding: 10px 22px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.nav-btn.active {
+  background: var(--rojo);
+  color: var(--blanco);
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  background: var(--blanco);
+  border-radius: 20px;
+  padding: 6px 14px;
+  gap: 8px;
+}
+.search input { border: none; outline: none; }
+
+.pill {
+  padding: 10px 22px;
+  border-radius: 22px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+.pill-white { background: var(--blanco); color: var(--negro); }
+.pill-red { background: var(--rojo); color: var(--blanco); }
+
+/* LAYOUT */
+.contenido {
+  display: flex;
+  gap: 24px;
+  padding: 24px;
+  align-items: flex-start;
+}
+
+.productos-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.card {
+  background: var(--blanco);
+  border: 1.5px solid var(--negro);
+  border-radius: 10px;
+  padding: 18px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.card h3 { font-size: 1.3rem; }
+.card p { color: var(--texto-secundario); font-size: 0.85rem; }
+
+.btn-agregar {
+  background: var(--negro);
+  color: var(--blanco);
+  border: none;
+  border-radius: 6px;
+  padding: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* CARRITO */
+.carrito {
+  width: 300px;
+  background: var(--blanco);
+  border-radius: 10px;
+  border: 1px solid #999;
+  padding: 16px;
+  position: relative;
+}
+
+.carrito-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.item-pedido {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.qty-controls button {
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--negro);
+  background: var(--blanco);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-quitar {
+  background: var(--rojo);
+  color: var(--blanco);
+  border: none;
+  border-radius: 4px;
+  padding: 4px 10px;
+  font-size: 0.8rem;
+  margin-top: 6px;
+  cursor: pointer;
+}
+
+hr.separador {
+  border: none;
+  border-top: 2px dashed var(--negro);
+  margin: 12px 0;
+}
+
+.btn-confirmar {
+  width: 100%;
+  background: var(--rojo);
+  color: var(--blanco);
+  border: none;
+  border-radius: 6px;
+  padding: 12px;
+  font-weight: 700;
+  margin-top: 12px;
+  cursor: pointer;
+}
+
+.fab-carrito {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--rojo);
+  color: var(--blanco);
+  border: none;
+  font-size: 1.4rem;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+/* Placeholder pages */
+.placeholder {
+  padding: 60px 24px;
+  text-align: center;
+}
+.placeholder input, .placeholder button.pill {
+  display: block;
+  width: 280px;
+  margin: 10px auto;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #999;
+}
