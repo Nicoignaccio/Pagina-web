@@ -37,7 +37,7 @@
     header {
       background: var(--dark-bar);
       color: #fff;
-      padding: 12px 24px;
+      padding: 10px 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -50,22 +50,19 @@
     .brand {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
+      text-decoration: none;
     }
-    .brand-logo {
-      width: 42px;
-      height: 42px;
+    .brand-logo-img {
+      width: 52px;
+      height: 52px;
       border-radius: 50%;
-      background: var(--red-accent);
+      object-fit: cover;
       border: 2px solid var(--gold);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      font-weight: 800;
-      color: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+      background-color: #000;
     }
-    .brand-title h1 { font-size: 20px; letter-spacing: 1px; color: #fff; }
+    .brand-title h1 { font-size: 20px; letter-spacing: 1px; color: #fff; line-height: 1.1; }
     .brand-title span { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--gold); }
 
     .nav-links {
@@ -311,7 +308,7 @@
     .btn-checkout:hover { background: var(--red-hover); }
     .btn-checkout:disabled { background: #bda29f; cursor: not-allowed; }
 
-    /* Notificación Toast */
+    /* Toast */
     .toast {
       position: fixed;
       bottom: 20px;
@@ -337,14 +334,15 @@
 </head>
 <body>
 
+  <!-- Barra de Navegación con el Logo -->
   <header>
-    <div class="brand">
-      <div class="brand-logo">福</div>
+    <a href="#" class="brand">
+      <img src="logo.png" alt="Fukusuke Sushi Logo" class="brand-logo-img">
       <div class="brand-title">
         <h1>Fukusuke</h1>
         <span>Sushi & Delivery</span>
       </div>
-    </div>
+    </a>
     <nav class="nav-links">
       <button class="nav-btn active">Home / Menú</button>
       <button class="nav-btn" onclick="toggleCart(true)">Carrito</button>
@@ -352,6 +350,7 @@
     </nav>
   </header>
 
+  <!-- Contenido Menú -->
   <main>
     <div class="catalog-header">
       <h2>Nuestra Carta</h2>
@@ -361,12 +360,14 @@
     <div id="catalog-container"></div>
   </main>
 
+  <!-- Botón Flotante del Carrito -->
   <button id="cart-fab" onclick="toggleCart(true)">
     <span>🛒 Ver Carro</span>
     <span class="badge-count mono" id="cart-badge">0</span>
     <span class="mono" id="cart-fab-total">$0</span>
   </button>
 
+  <!-- Overlay y Panel Lateral del Carrito -->
   <div class="cart-overlay" id="cart-overlay" onclick="toggleCart(false)"></div>
   <aside class="cart-panel" id="cart-panel">
     <div class="cart-header">
@@ -386,7 +387,6 @@
   <div class="toast" id="toast"></div>
 
   <script>
-    // Catálogo de Productos
     const PRODUCTS = [
       { id: 1, categoria: "Rolls", nombre: "Roll Fukusuke", desc: "Salmón, palta, queso crema y sésamo tostado por fuera.", precio: 6900 },
       { id: 2, categoria: "Rolls", nombre: "Roll Ebi Tempura", desc: "Camarón apanado crocante, palta y salsa acevichada.", precio: 7300 },
@@ -399,7 +399,6 @@
       { id: 9, categoria: "Bebidas", nombre: "Té Verde Helado 500cc", desc: "Infusión natural embotellada sin azúcar añadida.", precio: 1900 }
     ];
 
-    // Estado del Carrito (recuperado de localStorage si existe)
     let cart = JSON.parse(localStorage.getItem('fukusuke_cart') || '[]');
 
     function formatCLP(val) {
@@ -413,7 +412,6 @@
       setTimeout(() => t.classList.remove('show'), 2400);
     }
 
-    // Renderizar la carta en pantalla dividida por categorías
     function renderCatalog() {
       const container = document.getElementById('catalog-container');
       const categories = [...new Set(PRODUCTS.map(p => p.categoria))];
@@ -437,7 +435,6 @@
       `).join('');
     }
 
-    // Funciones del Carrito
     function addToCart(productId) {
       const product = PRODUCTS.find(p => p.id === productId);
       const existing = cart.find(i => i.id === productId);
@@ -522,7 +519,6 @@
       toggleCart(false);
     }
 
-    // Inicializar
     renderCatalog();
     renderCart();
   </script>
