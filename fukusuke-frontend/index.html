@@ -1,95 +1,530 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<title>Fukusuke Sushi - Home</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fukusuke Sushi · Sistema de Ventas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@600;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-body: #CAC7BE;
+      --card-bg: #EAE7DF;
+      --card-white: #FFFFFF;
+      --dark-bar: #141210;
+      --dark-text: #1C1A17;
+      --red-accent: #800000;
+      --red-hover: #9c0b0b;
+      --gray-text: #595349;
+      --border-color: #B5B0A2;
+      --gold: #C29B38;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg-body);
+      color: var(--dark-text);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    h1, h2, h3 { font-family: 'Shippori Mincho', serif; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+
+    /* Barra Superior */
+    header {
+      background: var(--dark-bar);
+      color: #fff;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 3px solid var(--red-accent);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--red-accent);
+      border: 2px solid var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 800;
+      color: #fff;
+    }
+    .brand-title h1 { font-size: 20px; letter-spacing: 1px; color: #fff; }
+    .brand-title span { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--gold); }
+
+    .nav-links {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .nav-btn {
+      background: transparent;
+      border: none;
+      color: #d1cec7;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .nav-btn:hover { color: #fff; background: rgba(255,255,255,0.08); }
+    .nav-btn.active {
+      background: var(--red-accent);
+      color: #fff;
+    }
+
+    /* Contenedor Principal */
+    main {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 30px 20px 90px;
+      flex: 1;
+    }
+
+    .catalog-header {
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 12px;
+    }
+    .catalog-header h2 { font-size: 26px; color: var(--dark-text); }
+    .catalog-header p { color: var(--gray-text); font-size: 14px; margin-top: 4px; }
+
+    .category-title {
+      font-size: 20px;
+      margin: 28px 0 16px;
+      color: var(--dark-text);
+      border-left: 4px solid var(--red-accent);
+      padding-left: 10px;
+    }
+
+    /* Grilla de productos */
+    .grid-products {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: var(--card-white);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+    }
+    .card-top { margin-bottom: 14px; }
+    .card h3 { font-size: 17px; margin-bottom: 6px; color: var(--dark-text); }
+    .card-desc { font-size: 13px; color: var(--gray-text); line-height: 1.4; }
+    .card-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px dashed var(--border-color);
+    }
+    .price {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--red-accent);
+    }
+    .btn-add {
+      background: var(--dark-bar);
+      color: #fff;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s;
+    }
+    .btn-add:hover { background: var(--red-accent); }
+
+    /* Botón Flotante Carrito */
+    #cart-fab {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--dark-bar);
+      color: #fff;
+      border: 2px solid var(--gold);
+      border-radius: 50px;
+      padding: 12px 22px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      z-index: 40;
+      transition: transform 0.2s;
+    }
+    #cart-fab:hover { transform: scale(1.04); background: #000; }
+    .badge-count {
+      background: var(--red-accent);
+      color: #fff;
+      padding: 2px 7px;
+      border-radius: 12px;
+      font-size: 12px;
+    }
+
+    /* Panel Lateral Carrito */
+    .cart-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 90;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    .cart-overlay.show { opacity: 1; pointer-events: auto; }
+    .cart-panel {
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100%;
+      width: 380px;
+      max-width: 90vw;
+      background: #FFFFFF;
+      box-shadow: -8px 0 25px rgba(0,0,0,0.25);
+      z-index: 100;
+      transform: translateX(100%);
+      transition: transform 0.28s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .cart-panel.open { transform: translateX(0); }
+    .cart-header {
+      padding: 18px 20px;
+      background: var(--dark-bar);
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--red-accent);
+    }
+    .cart-header h3 { font-size: 18px; margin: 0; }
+    .btn-close {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 20px;
+      cursor: pointer;
+    }
+    .cart-items {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #ECE8E0;
+      padding-bottom: 10px;
+    }
+    .cart-item-title { font-weight: 600; font-size: 14px; }
+    .cart-item-price { font-size: 12.5px; color: var(--gray-text); }
+    .qty-controls {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .qty-btn {
+      width: 26px;
+      height: 26px;
+      border: 1px solid var(--border-color);
+      background: #fff;
+      border-radius: 4px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .qty-btn:hover { background: #EAE7DF; }
+    .btn-remove {
+      border: none;
+      background: transparent;
+      color: var(--red-accent);
+      font-size: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-left: 6px;
+    }
+    .cart-footer {
+      padding: 18px 20px;
+      background: #F8F6F0;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .cart-total-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 18px;
+      font-weight: 700;
+    }
+    .btn-checkout {
+      background: var(--red-accent);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 12px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      text-align: center;
+      transition: background 0.2s;
+    }
+    .btn-checkout:hover { background: var(--red-hover); }
+    .btn-checkout:disabled { background: #bda29f; cursor: not-allowed; }
+
+    /* Notificación Toast */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--dark-bar);
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 13.5px;
+      border-left: 4px solid var(--gold);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, -6px);
+    }
+  </style>
 </head>
 <body>
 
-<nav class="navbar">
-  <div class="logo">
-    <div class="logo-circle">FUKUSUKE<br>SUSHI</div>
-  </div>
-  <div class="nav-links">
-    <a href="index.html" class="nav-btn active">Home</a>
-    <a href="productos.html">Productos</a>
-    <a href="mis-pedidos.html">Mis pedidos</a>
-  </div>
-  <div class="search">
-    <input type="text" placeholder="Search">
-    <span>&#128269;</span>
-  </div>
-  <div class="nav-links">
-    <a href="registrarme.html" class="pill pill-white">registrarme</a>
-    <a href="login.html" class="pill pill-red">Iniciar Sesión</a>
-  </div>
-</nav>
-
-<div class="contenido">
-  <div class="productos-grid">
-    <div class="card">
-      <h3>Roll Fukusuke</h3>
-      <p>Salmón, palta, queso crema, por fuera con sésamo tostado.</p>
-      <button class="btn-agregar">agregar</button>
-    </div>
-    <div class="card">
-      <h3>Hand roll</h3>
-      <p>Salmón, palta, queso crema, por fuera con sésamo tostado.</p>
-      <button class="btn-agregar">agregar</button>
-    </div>
-    <div class="card">
-      <h3>40 piezas</h3>
-      <p>Salmón, palta, queso crema, por fuera con sésamo tostado.</p>
-      <button class="btn-agregar">agregar</button>
-    </div>
-    <div class="card">
-      <h3>20 piezas</h3>
-      <p>Salmón, palta, queso crema, por fuera con sésamo tostado.</p>
-      <button class="btn-agregar">agregar</button>
-    </div>
-    <div class="card">
-      <h3>Promo web</h3>
-      <p>Salmón, palta, queso crema, por fuera con sésamo tostado.</p>
-      <button class="btn-agregar">agregar</button>
-    </div>
-    <div class="card">
-      <h3>Hand roll + bebida</h3>
-      <p>Salmón, palta, queso crema, por fuera con sésamo tostado.</p>
-      <button class="btn-agregar">agregar</button>
-    </div>
-    <div class="card">
-      <h3>Roll valoranchi</h3>
-      <p>Salmón, palta, queso crema, por fuera con sésamo tostado.</p>
-      <button class="btn-agregar">agregar</button>
-    </div>
-    <div class="card">
-      <h3>100 piezas deluxe</h3>
-      <p>Salmón, palta, queso crema, por fuera con sésamo tostado.</p>
-      <button class="btn-agregar">agregar</button>
-    </div>
-  </div>
-
-  <aside class="carrito">
-    <div class="carrito-header">
-      <span>Tu pedido</span>
-      <span>&times;</span>
-    </div>
-    <div class="item-pedido">
-      <div>
-        Roll Fukusuke<br>Hand roll
-        <div><button class="btn-quitar">Quitar</button></div>
-      </div>
-      <div class="qty-controls">
-        <button>-</button> <button>+</button>
+  <header>
+    <div class="brand">
+      <div class="brand-logo">福</div>
+      <div class="brand-title">
+        <h1>Fukusuke</h1>
+        <span>Sushi & Delivery</span>
       </div>
     </div>
-    <hr class="separador">
-    <button class="btn-confirmar">confirmar pedido</button>
+    <nav class="nav-links">
+      <button class="nav-btn active">Home / Menú</button>
+      <button class="nav-btn" onclick="toggleCart(true)">Carrito</button>
+      <a href="login.html" class="nav-btn" style="text-decoration: none;">Iniciar Sesión</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="catalog-header">
+      <h2>Nuestra Carta</h2>
+      <p>Selecciona tus rolls y acompañamientos favoritos para agregarlos al pedido.</p>
+    </div>
+
+    <div id="catalog-container"></div>
+  </main>
+
+  <button id="cart-fab" onclick="toggleCart(true)">
+    <span>🛒 Ver Carro</span>
+    <span class="badge-count mono" id="cart-badge">0</span>
+    <span class="mono" id="cart-fab-total">$0</span>
+  </button>
+
+  <div class="cart-overlay" id="cart-overlay" onclick="toggleCart(false)"></div>
+  <aside class="cart-panel" id="cart-panel">
+    <div class="cart-header">
+      <h3>Tu Pedido</h3>
+      <button class="btn-close" onclick="toggleCart(false)">✕</button>
+    </div>
+    <div class="cart-items" id="cart-items-list"></div>
+    <div class="cart-footer">
+      <div class="cart-total-row">
+        <span>Total:</span>
+        <span class="mono" id="cart-total-amount">$0</span>
+      </div>
+      <button class="btn-checkout" id="btn-checkout" onclick="confirmarPedido()">Confirmar Pedido</button>
+    </div>
   </aside>
-</div>
 
-<button class="fab-carrito">&#128722;</button>
+  <div class="toast" id="toast"></div>
 
+  <script>
+    // Catálogo de Productos
+    const PRODUCTS = [
+      { id: 1, categoria: "Rolls", nombre: "Roll Fukusuke", desc: "Salmón, palta, queso crema y sésamo tostado por fuera.", precio: 6900 },
+      { id: 2, categoria: "Rolls", nombre: "Roll Ebi Tempura", desc: "Camarón apanado crocante, palta y salsa acevichada.", precio: 7300 },
+      { id: 3, categoria: "Rolls", nombre: "Roll California", desc: "Kanikama, palta y pepino fresco, cubierto en sésamo.", precio: 5900 },
+      { id: 4, categoria: "Nigiris & Sashimi", nombre: "Nigiri de Salmón (2 un.)", desc: "Corte fresco sobre arroz sazonado con vinagre de arroz.", precio: 3200 },
+      { id: 5, categoria: "Nigiris & Sashimi", nombre: "Sashimi Mixto (9 cortes)", desc: "Cortes seleccionados de salmón fresco, atún y pulpo.", precio: 9500 },
+      { id: 6, categoria: "Entradas", nombre: "Gyozas de Cerdo (5 un.)", desc: "Empanaditas japonesas al vapor y doradas a la plancha.", precio: 4200 },
+      { id: 7, categoria: "Entradas", nombre: "Sopa Miso", desc: "Caldo tradicional con tofu suave, alga wakame y cebollín.", precio: 2500 },
+      { id: 8, categoria: "Bebidas", nombre: "Bebida en Lata 350cc", desc: "Variedad a elección (Coca-Cola, Sprite o Zero).", precio: 1500 },
+      { id: 9, categoria: "Bebidas", nombre: "Té Verde Helado 500cc", desc: "Infusión natural embotellada sin azúcar añadida.", precio: 1900 }
+    ];
+
+    // Estado del Carrito (recuperado de localStorage si existe)
+    let cart = JSON.parse(localStorage.getItem('fukusuke_cart') || '[]');
+
+    function formatCLP(val) {
+      return new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 }).format(val);
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2400);
+    }
+
+    // Renderizar la carta en pantalla dividida por categorías
+    function renderCatalog() {
+      const container = document.getElementById('catalog-container');
+      const categories = [...new Set(PRODUCTS.map(p => p.categoria))];
+
+      container.innerHTML = categories.map(cat => `
+        <h3 class="category-title">${cat}</h3>
+        <div class="grid-products">
+          ${PRODUCTS.filter(p => p.categoria === cat).map(p => `
+            <div class="card">
+              <div class="card-top">
+                <h3>${p.nombre}</h3>
+                <p class="card-desc">${p.desc}</p>
+              </div>
+              <div class="card-bottom">
+                <span class="price mono">${formatCLP(p.precio)}</span>
+                <button class="btn-add" onclick="addToCart(${p.id})">+ Agregar</button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `).join('');
+    }
+
+    // Funciones del Carrito
+    function addToCart(productId) {
+      const product = PRODUCTS.find(p => p.id === productId);
+      const existing = cart.find(i => i.id === productId);
+
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({ id: product.id, nombre: product.nombre, precio: product.precio, qty: 1 });
+      }
+
+      saveCart();
+      showToast(`+ Se añadió ${product.nombre}`);
+    }
+
+    function updateQty(productId, delta) {
+      const item = cart.find(i => i.id === productId);
+      if (!item) return;
+
+      item.qty += delta;
+      if (item.qty <= 0) {
+        cart = cart.filter(i => i.id !== productId);
+      }
+      saveCart();
+    }
+
+    function removeItem(productId) {
+      cart = cart.filter(i => i.id !== productId);
+      saveCart();
+    }
+
+    function saveCart() {
+      localStorage.setItem('fukusuke_cart', JSON.stringify(cart));
+      renderCart();
+    }
+
+    function toggleCart(open) {
+      document.getElementById('cart-panel').classList.toggle('open', open);
+      document.getElementById('cart-overlay').classList.toggle('show', open);
+    }
+
+    function renderCart() {
+      const list = document.getElementById('cart-items-list');
+      const badge = document.getElementById('cart-badge');
+      const fabTotal = document.getElementById('cart-fab-total');
+      const totalAmount = document.getElementById('cart-total-amount');
+      const checkoutBtn = document.getElementById('btn-checkout');
+
+      const totalCount = cart.reduce((sum, i) => sum + i.qty, 0);
+      const totalCost = cart.reduce((sum, i) => sum + (i.precio * i.qty), 0);
+
+      badge.textContent = totalCount;
+      fabTotal.textContent = formatCLP(totalCost);
+      totalAmount.textContent = formatCLP(totalCost);
+      checkoutBtn.disabled = cart.length === 0;
+
+      if (cart.length === 0) {
+        list.innerHTML = `<div style="text-align:center;color:var(--gray-text);padding:40px 10px;">Tu carro está vacío.<br>Agrega platos desde la carta.</div>`;
+        return;
+      }
+
+      list.innerHTML = cart.map(i => `
+        <div class="cart-item">
+          <div>
+            <div class="cart-item-title">${i.nombre}</div>
+            <div class="cart-item-price mono">${formatCLP(i.precio)} × ${i.qty}</div>
+          </div>
+          <div class="qty-controls">
+            <button class="qty-btn" onclick="updateQty(${i.id}, -1)">−</button>
+            <span class="mono" style="font-weight:700;font-size:13px;min-width:18px;text-align:center;">${i.qty}</span>
+            <button class="qty-btn" onclick="updateQty(${i.id}, 1)">+</button>
+            <button class="btn-remove" onclick="removeItem(${i.id})">Quitar</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function confirmarPedido() {
+      if (cart.length === 0) return;
+      alert(`¡Pedido confirmado por ${formatCLP(cart.reduce((s,i)=>s+i.precio*i.qty,0))}!\nPronto pasará al estado de preparación.`);
+      cart = [];
+      saveCart();
+      toggleCart(false);
+    }
+
+    // Inicializar
+    renderCatalog();
+    renderCart();
+  </script>
 </body>
 </html>
