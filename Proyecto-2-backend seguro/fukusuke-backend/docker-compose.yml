@@ -1,0 +1,79 @@
+# Red 'public': solo el gateway. Red 'private' (internal): sin acceso desde el host ni hacia Internet.
+x-svc: &svc
+  build: .
+  restart: unless-stopped
+  networks: [private]
+  volumes: ["data:/data"]
+  environment: &common-env
+    VAULT_ADDR: http://vault:8200
+    VAULT_TOKEN: ${VAULT_TOKEN}
+    DATA_DIR: /data
+    INVENTORY_URL: http://inventory:9001
+    CLIENTS_URL: http://clients:9002
+    ORDERS_URL: http://orders:9003
+    PAYMENTS_URL: http://payments:9004
+    GRAPHQL_URL: http://graphql:9005
+    AUTH_URL: http://auth:8100
+  depends_on:
+    vault-init: {condition: service_completed_successfully}
+
+services:
+  vault:
+    image: hashicorp/vault:1.17
+    cap_add: [IPC_LOCK]
+    environment:
+      VAULT_DEV_ROOT_TOKEN_ID: ${VAULT_TOKEN}
+      VAULT_DEV_LISTEN_ADDRESS: 0.0.0.0:8200
+    networks: [private]
+
+  vault-init:
+    image: hashicorp/vault:1.17
+    networks: [private]
+    depends_on: [vault]
+    env_file: .env
+    environment: {VAULT_ADDR: "http://vault:8200"}
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        until vault status >/dev/null 2>&1; do sleep 1; done
+        vault kv put secret/fukusuke AUTH_INTROSPECTION_SECRET="$$AUTH_INTROSPECTION_SECRET" \
+          INVENTORY_SERVICE_SECRET="$$INVENTORY_SERVICE_SECRET" CLIENTS_SERVICE_SECRET="$$CLIENTS_SERVICE_SECRET" \
+          ORDERS_SERVICE_SECRET="$$ORDERS_SERVICE_SECRET" PAYMENTS_SERVICE_SECRET="$$PAYMENTS_SERVICE_SECRET" \
+          GRAPHQL_SERVICE_SECRET="$$GRAPHQL_SERVICE_SECRET" PAYMENTS_WEBHOOK_SECRET="$$PAYMENTS_WEBHOOK_SECRET" \
+          SEED_PASSWORD="$$SEED_PASSWORD"
+
+  auth:
+    <<: *svc
+    command: uvicorn auth_service.main:app --host 0.0.0.0 --port 8100
+    environment: {<<: *common-env, SEED_PASSWORD: "${SEED_PASSWORD}"}
+  inventory:
+    <<: *svc
+    command: uvicorn inventory.main:app --host 0.0.0.0 --port 9001
+  clients:
+    <<: *svc
+    command: uvicorn clients.main:app --host 0.0.0.0 --port 9002
+  orders:
+    <<: *svc
+    command: uvicorn orders.main:app --host 0.0.0.0 --port 9003
+  payments:
+    <<: *svc
+    command: uvicorn payments.main:app --host 0.0.0.0 --port 9004
+  graphql:
+    <<: *svc
+    command: uvicorn graphql_gateway.main:app --host 0.0.0.0 --port 9005
+  gateway:
+    <<: *svc
+    command: uvicorn gateway.main:app --host 0.0.0.0 --port 8000
+    networks: [public, private]
+    ports: ["8000:8000"]
+    environment: {<<: *common-env, CORS_ORIGINS: "${CORS_ORIGINS:-}"}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://127.0.0.1:8000/health')"]
+      interval: 10s
+      retries: 5
+
+networks:
+  public: {}
+  private: {internal: true}
+volumes:
+  data: {}

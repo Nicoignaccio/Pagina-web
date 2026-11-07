@@ -1,0 +1,7 @@
+fastapi==0.162.2
+uvicorn==0.54.0
+httpx==0.28.1
+pydantic==2.14.3
+strawberry-graphql==0.341.2
+stomp.py==9.0.0
+pytest==9.2.0
